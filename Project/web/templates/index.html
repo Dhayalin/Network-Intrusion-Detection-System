@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIDS — Network Intrusion Detection System</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">NIDS<span class="logo-sub">v1.0</span></span>
+      </div>
+      <div class="status-badge" id="statusBadge">
+        <span class="pulse"></span>
+        <span id="statusText">CONNECTING…</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-stat">
+        <span class="hs-label">UPTIME</span>
+        <span class="hs-value" id="uptime">--</span>
+      </div>
+      <div class="header-stat">
+        <span class="hs-label">PACKETS</span>
+        <span class="hs-value" id="totalPackets">--</span>
+      </div>
+      <div class="header-stat">
+        <span class="hs-label">ALERTS</span>
+        <span class="hs-value" id="totalAlerts">--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main layout ────────────────────────────────────── -->
+  <main class="layout">
+
+    <!-- Column 1: Alert feed + severity cards -->
+    <aside class="sidebar">
+      <div class="severity-grid">
+        <div class="sev-card critical"><span class="sev-label">CRITICAL</span><span class="sev-count" id="sevCritical">0</span></div>
+        <div class="sev-card high">    <span class="sev-label">HIGH</span>    <span class="sev-count" id="sevHigh">0</span></div>
+        <div class="sev-card medium">  <span class="sev-label">MEDIUM</span>  <span class="sev-count" id="sevMedium">0</span></div>
+        <div class="sev-card low">     <span class="sev-label">LOW</span>     <span class="sev-count" id="sevLow">0</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span>⚠ ALERT FEED</span>
+          <span class="badge" id="alertBadge">0</span>
+        </div>
+        <div class="alert-feed" id="alertFeed">
+          <div class="empty-state">Monitoring for threats…</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Column 2: Charts + packet table -->
+    <section class="main-content">
+
+      <!-- Row 1: traffic timeline -->
+      <div class="panel chart-panel">
+        <div class="panel-header"><span>📈 TRAFFIC TIMELINE (last 30s)</span></div>
+        <canvas id="timelineChart" height="90"></canvas>
+      </div>
+
+      <!-- Row 2: protocol donut + top talkers -->
+      <div class="two-col">
+        <div class="panel chart-panel">
+          <div class="panel-header"><span>🔵 PROTOCOL DISTRIBUTION</span></div>
+          <canvas id="protoChart" height="160"></canvas>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span>🔥 TOP TALKERS</span></div>
+          <table class="data-table" id="talkerTable">
+            <thead><tr><th>IP ADDRESS</th><th>PACKETS</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Row 3: live packet feed -->
+      <div class="panel">
+        <div class="panel-header">
+          <span>📡 LIVE PACKET FEED</span>
+          <label class="toggle-label">
+            <input type="checkbox" id="pauseToggle" /> Pause
+          </label>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table packet-table">
+            <thead>
+              <tr>
+                <th>TIME</th><th>PROTOCOL</th><th>SRC IP</th>
+                <th>SRC PORT</th><th>DST IP</th><th>DST PORT</th><th>FLAGS</th><th>LEN</th>
+              </tr>
+            </thead>
+            <tbody id="packetTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
